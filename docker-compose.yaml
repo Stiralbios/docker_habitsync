@@ -1,0 +1,40 @@
+services:
+  web:
+    image: ghcr.io/jofoerster/habitsync:latest
+    environment:
+      - BASE_URL=https://habits.eagal.org
+      # Choose one or more of the following authentication methods:
+      # OIDC Issuers (tested with Authelia, Google), use public client settings (PKCE flow), 
+      # set BASE_URL/auth-callback as redirect, for mobile: habitsync:///auth-callback
+      # more than one issuer can be configured
+      # scopes: openid, profile, email
+      # issues setting this up? -> create an issue on github
+      # - APP_SECURITY_ISSUERS_<YOUR-ISSUER_NAME>_URL=<issuer-url> # no trailing `/`
+      # - APP_SECURITY_ISSUERS_<YOUR-ISSUER_NAME>_CLIENT-ID=<client-id>
+      # - APP_SECURITY_ISSUERS_<YOUR-ISSUER_NAME>_NEEDS-CONFIRMATION=true # New users need to to be 'let in' by other user, default: true 
+      # Google: Use normal web client settings, set CLIENT-SECRET as workaround for Google
+      # - APP_SECURITY_ISSUERS_GOOGLE_URL=https://accounts.google.com
+      # - APP_SECURITY_ISSUERS_GOOGLE_CLIENT-ID=<client-id>
+      # - APP_SECURITY_ISSUERS_GOOGLE_CLIENT-SECRET=<client-secret> # ONLY AS WORKAROUND FOR GOOGLE, PUBLICALLY AVAILABLE TO CLIENTS!
+      # Login using username and password (basic auth)
+      # Create hash using: htpasswd -bnBC 10 "" password123 | tr -d ':\n' | sed 's/\$/\$\$/g'
+      # $ get replaced with $$ to work in env variables. This might be different in other environments
+      - APP_SECURITY_BASIC-AUTH-USERS_astyan=$$2y$$10$$riHMnJIjoeLwZKRRvTw5mesVHNx6j8uy5NGEi7Pu.W48pw9pYr35y
+      # Mail setup for notifications
+      # - SPRING_MAIL_HOST=<mail-host>
+      # - SPRING_MAIL_USERNAME=<mail-username>
+      # - SPRING_MAIL_PASSWORD=<mail-password>
+      # - SPRING_MAIL_PORT=587
+       # optional SHA-512 hash of your secret key, generate with `openssl rand -base64 64`. Needed to keep sessions across restarts
+      # - JWT_SECRET=<your-jwt-secret>
+      # - APPRISE_API_URL=<your-apprise-url> # optional, see Notifications section below
+      # - TRACKER_DATEFORMAT_TEMPLATE=DD.MM. # optional, only DD, MM supported currently, sets date format in tracker globally
+      # - PAGE_CHALLENGES_VISIBLE=true # optional, show challenges page in navigation, set to false to hide globally
+      # available from version 0.17.0:
+      # - PUID=1000 # optional, user ID to run as, defaults to 6842
+      # - PGID=1000 # optional, group ID to run as, defaults to 6842
+#    volumes:
+#      - ./data:/data #needed for persistent database storage
+    ports:
+      - "6842:6842" # Application accessible under this port
+#     - "9092:9092" # For database access, optional
