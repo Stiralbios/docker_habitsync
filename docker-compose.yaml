@@ -1,6 +1,7 @@
 services:
   web:
     image: ghcr.io/jofoerster/habitsync:latest
+    container_name: habitsync
     environment:
       - BASE_URL=https://habits.eagal.org
       # Choose one or more of the following authentication methods:
@@ -33,8 +34,8 @@ services:
       # available from version 0.17.0:
       # - PUID=1000 # optional, user ID to run as, defaults to 6842
       # - PGID=1000 # optional, group ID to run as, defaults to 6842
-#    volumes:
-#      - ./data:/data #needed for persistent database storage
+    volumes:
+      - ./data:/data #needed for persistent database storage
     ports:
       - "6842:6842" # Application accessible under this port
 #     - "9092:9092" # For database access, optional
